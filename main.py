@@ -160,7 +160,7 @@ def create_fading_grid(dwg, start_insert, width, height, square_size=10, spacing
                         insert=(x, y), size=(square_size, square_size),
                         fill="white", stroke="none", rx=1, ry=1, fill_opacity=opacity, stroke_opacity=opacity))
 
-def back_qr_code(url = "https://github.com/noatgnu/businesscard"):
+def back_qr_code(url = "https://github.com/noatgnu/business-card-generator"):
     qr = segno.make(url)
     qr.save("qr_code_back.svg", scale=10, data_dark=fill_color, dark=fill_color, light=back_color, border=1)
 
@@ -190,7 +190,7 @@ if __name__ == "__main__":
     create_fading_grid(dwg, start_insert=(width_px - width_px*0.05, height_px - height_px*0.075), width=width_px*2.1 // 4, height=height_px // 1.5,
                        square_size=5, spacing=5, max_opacity=0.5)
 
-    create_protein_chain(dwg, start_insert=(width_px - width_px*0.1, height_px - height_px*0.85), num_cubes=12, size_increment=0, x_angle=0,
+    create_protein_chain(dwg, start_insert=(width_px - width_px*0.12, height_px - height_px*0.88), num_cubes=12, size_increment=0, x_angle=0,
                          y_angle=0, z_angle=0, size=15, gap=5)
 
     panel_width = config["panel_width"]
@@ -280,8 +280,8 @@ if __name__ == "__main__":
                        width=width_px * 4 // 4 + 10, height=height_px // 2.5 - 5,
                        square_size=5, spacing=5, max_opacity=0.5)
 
-    create_protein_chain(business_card_back, start_insert=(width_px - width_px*0.1, height_px - height_px*0.5), num_cubes=30, size_increment=0, x_angle=0,
-                         y_angle=0, z_angle=0, size=15, gap=5)
+    create_protein_chain(business_card_back, start_insert=(width_px - width_px*0.08, height_px - height_px*0.49), num_cubes=24, size_increment=0, x_angle=0,
+                         y_angle=0, z_angle=50, size=16, gap=5)
     business_card_back.add(business_card_back.text(f"{version}",
                      insert=(panel_x + 5, panel_y),
                      font_size="8px", font_family="AvantGarde LT CondMedium", fill="white"))
@@ -321,8 +321,8 @@ if __name__ == "__main__":
 
 
     business_card_back.add(business_card_back.text(f"{seed}",
-                     insert=(width_px - 20, height_px - 1),
-                     font_size="7px", font_family="AvantGarde LT CondMedium", fill="white", text_anchor="end"))
+                     insert=(width_px - 20, height_px - 2),
+                     font_size="6px", font_family="AvantGarde LT CondMedium", fill="white", text_anchor="end"))
 
     business_card_back.save()
 
