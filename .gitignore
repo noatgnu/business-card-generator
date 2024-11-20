@@ -1,0 +1,13 @@
+#Pycharm
+.idea
+
+#Python
+__pycache__/
+*.pyc
+
+#Graphic
+*.svg
+
+#Config
+*.env
+*.json

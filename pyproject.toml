@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "businesscard"
+version = "0.1.0"
+description = ""
+authors = ["Toan Phung <toan.phung@proteo.info>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+svgwrite = "^1.4.3"
+qrcode = {extras = ["pil"], version = "^8.0"}
+segno = "^1.6.1"
+svgutils = "^0.3.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
