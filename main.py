@@ -282,45 +282,49 @@ if __name__ == "__main__":
 
     create_protein_chain(business_card_back, start_insert=(width_px - width_px*0.08, height_px - height_px*0.49), num_cubes=24, size_increment=0, x_angle=0,
                          y_angle=0, z_angle=50, size=16, gap=5)
-    business_card_back.add(business_card_back.text(f"{version}",
+    if "add_version" in config:
+        if config["add_version"]:
+            business_card_back.add(business_card_back.text(f"{version}",
                      insert=(panel_x + 5, panel_y),
                      font_size="8px", font_family="AvantGarde LT CondMedium", fill="white"))
-
-    back_qr_code()
-
-
-    business_card_back.add(business_card_back.image(href="qr_code_back.svg", insert=(10, 10), size=(30, 30)))
-
-    business_card_back.add(
-        business_card_back.rect(insert=(7, 7), size=(frame_size, stroke_width),
-                 fill=stroke_color))
-    business_card_back.add(
-        business_card_back.rect(insert=(7, 7), size=(stroke_width, frame_size),
-                 fill=stroke_color))
-
-    business_card_back.add(
-        business_card_back.rect(insert=(7, 41), size=(frame_size, stroke_width),
-                 fill=stroke_color))
-    business_card_back.add(
-        business_card_back.rect(insert=(7, 33), size=(stroke_width, frame_size),
-                 fill=stroke_color))
-
-    business_card_back.add(
-        business_card_back.rect(insert=(33, 7),
-                     size=(frame_size, stroke_width), fill=stroke_color))
-    business_card_back.add(
-        business_card_back.rect(insert=(41, 7),
-                     size=(stroke_width, frame_size), fill=stroke_color))
-
-    business_card_back.add(
-        business_card_back.rect(insert=(33, 41),
-                     size=(frame_size, stroke_width), fill=stroke_color))
-    business_card_back.add(
-        business_card_back.rect(insert=(41, 33),
-                     size=(stroke_width, frame_size), fill=stroke_color))
+    if "add_repo_qr" in config:
+        if config["add_repo_qr"]:
+            back_qr_code()
 
 
-    business_card_back.add(business_card_back.text(f"{seed}",
+            business_card_back.add(business_card_back.image(href="qr_code_back.svg", insert=(10, 10), size=(30, 30)))
+
+            business_card_back.add(
+                business_card_back.rect(insert=(7, 7), size=(frame_size, stroke_width),
+                         fill=stroke_color))
+            business_card_back.add(
+                business_card_back.rect(insert=(7, 7), size=(stroke_width, frame_size),
+                         fill=stroke_color))
+
+            business_card_back.add(
+                business_card_back.rect(insert=(7, 41), size=(frame_size, stroke_width),
+                         fill=stroke_color))
+            business_card_back.add(
+                business_card_back.rect(insert=(7, 33), size=(stroke_width, frame_size),
+                         fill=stroke_color))
+
+            business_card_back.add(
+                business_card_back.rect(insert=(33, 7),
+                             size=(frame_size, stroke_width), fill=stroke_color))
+            business_card_back.add(
+                business_card_back.rect(insert=(41, 7),
+                             size=(stroke_width, frame_size), fill=stroke_color))
+
+            business_card_back.add(
+                business_card_back.rect(insert=(33, 41),
+                             size=(frame_size, stroke_width), fill=stroke_color))
+            business_card_back.add(
+                business_card_back.rect(insert=(41, 33),
+                             size=(stroke_width, frame_size), fill=stroke_color))
+
+    if "add_seed_value" in config:
+        if config["add_seed_value"]:
+            business_card_back.add(business_card_back.text(f"{seed}",
                      insert=(width_px - 20, height_px - 2),
                      font_size="6px", font_family="AvantGarde LT CondMedium", fill="white", text_anchor="end"))
 
