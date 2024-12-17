@@ -1,22 +1,35 @@
+import argparse
 import json
 import random
 import uuid
 import segno
-import svgutils.transform
 import svgwrite
 import math
 from segno import helpers
-from svgutils.compose import Figure, SVG
+
+parser = argparse.ArgumentParser(description="Generate a business card in SVG format.")
+parser.add_argument('--config', type=str, default='config.json', help='Path to the configuration file')
+args = parser.parse_args()
 
 # Load configuration
-with open('config.json', 'r') as config_file:
+with open(args.config, 'r') as config_file:
     config = json.load(config_file)
+
+# Use AvantGarde LT CondMedium as default font and override if specified in config
+font = "AvantGarde LT CondMedium"
+if "font" in config:
+    font = config["font"]
 
 # Use seed from config if available, otherwise generate a new one
 seed = config.get("seed", str(uuid.uuid4()))
 random.seed(seed)
 
-def create_3d_cube(svgdrawer, insert, size=50, fill_color="#D1E2F2", stroke_color="#4365E1", x_angle=0, y_angle=0, z_angle=0, fill_opacity=1.0, stroke_opacity=1.0, face_scale=0.9, gap=20):
+def create_3d_cube(svgdrawer, insert, size=50,
+                   fill_color="#D1E2F2",
+                   stroke_color="#4365E1",
+                   x_angle=0,
+                   y_angle=0,
+                   z_angle=0, fill_opacity=1.0, stroke_opacity=1.0, face_scale=0.9, gap=20):
     rad = math.radians(0)
     x_rad = math.radians(x_angle)
     y_rad = math.radians(y_angle)
@@ -99,7 +112,7 @@ def create_3d_cube(svgdrawer, insert, size=50, fill_color="#D1E2F2", stroke_colo
         adjust_for_gap((scaled_points[2][0], scaled_points[2][1] + size * face_scale), 'right', gap),
         adjust_for_gap((scaled_points[1][0], scaled_points[1][1] + size * face_scale), 'right', gap)
     ]
-    darker_fill_color = "#4365E1"
+    darker_fill_color = stroke_color
     svgdrawer.add(svgdrawer.polygon(side_face, fill=darker_fill_color, stroke=stroke_color, fill_opacity=fill_opacity, stroke_opacity=stroke_opacity))
 
     bottom_face = [
@@ -134,7 +147,7 @@ def create_protein_chain(drawer, start_insert, num_cubes, size_increment=5, x_an
             #fill_opacity = random.randrange(0, 100) / 100
             create_3d_cube(drawer, insert, size=size, x_angle=x_angle, y_angle=y_angle, z_angle=z_angle + phase_shift,
                            fill_opacity=fill_opacity,
-                           stroke_opacity=fill_opacity, gap=gap, fill_color="white")
+                           stroke_opacity=fill_opacity, gap=gap, fill_color=back_color, stroke_color=fill_color)
             insert = (insert[0] - size * 1.5, insert[1] - size * 0)
             size += size_increment
             x_angle += 5
@@ -169,9 +182,10 @@ if __name__ == "__main__":
     version = "v1.0"
     width_mm = 84
     height_mm = 54
+    bleed_mm = 3
 
-    width_px = width_mm * 3.5433
-    height_px = height_mm * 3.5433
+    width_px = (width_mm + 2 * bleed_mm) * 3.5433
+    height_px = (height_mm + 2 * bleed_mm) * 3.5433
 
     dwg = svgwrite.Drawing("business_card.svg", size=(f"{width_px}px", f"{height_px}px"))
 
@@ -185,7 +199,7 @@ if __name__ == "__main__":
     dwg.add(dwg.rect(rx=0, ry=0,
                      insert=(border_width, border_width),
                      size=(width_px - 2 * border_width, height_px - 2 * border_width),
-                     fill=fill_color, stroke="white"))
+                     fill=fill_color, stroke=fill_color))
 
     create_fading_grid(dwg, start_insert=(width_px - width_px*0.05, height_px - height_px*0.075), width=width_px*2.1 // 4, height=height_px // 1.5,
                        square_size=5, spacing=5, max_opacity=0.5)
@@ -217,19 +231,19 @@ if __name__ == "__main__":
         url]:
         dwg.add(dwg.text(line,
                          insert=(padding+5, y_offset),
-                         font_size="8px", font_family="AvantGarde LT CondMedium", fill="white"
+                         font_size="8px", font_family=font, fill="white"
                          ))
         y_offset -= 10
     y_offset -= 10
     dwg.add(dwg.text(
         name_text,
         insert=(padding+5, y_offset),
-        font_size="18px", font_family="AvantGarde LT CondMedium", fill="white"))
+        font_size="18px", font_family=font, fill="white"))
     y_offset -= 20
 
     dwg.add(dwg.text(job_title,
                      insert=(padding+5, y_offset),
-                     font_size="14px", font_family="AvantGarde LT CondMedium", fill="white"
+                     font_size="14px", font_family=font, fill="white"
                      ))
     make_colored_qr_code(name=name_text, phone=phone, email=email, url=url, filename="qr_code.svg", back_color=back_color, fill_color=fill_color)
     qr_code_x, qr_code_y = config["qr_code_x"], config["qr_code_y"]
@@ -286,7 +300,7 @@ if __name__ == "__main__":
         if config["add_version"]:
             business_card_back.add(business_card_back.text(f"{version}",
                      insert=(panel_x + 5, panel_y),
-                     font_size="8px", font_family="AvantGarde LT CondMedium", fill="white"))
+                     font_size="8px", font_family=font, fill="white"))
     if "add_repo_qr" in config:
         if config["add_repo_qr"]:
             back_qr_code()
